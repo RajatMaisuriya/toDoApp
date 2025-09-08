@@ -22,6 +22,7 @@ mongoose.connection
 const todoSchema = new mongoose.Schema({
   task: { type: String, required: true },
   completed: { type: Boolean, default: false },
+  dueDate: { type: Date },
 });
 
 const Todo = mongoose.model("Todo", todoSchema);
@@ -39,17 +40,20 @@ app.get("/api/todos", async (req, res) => {
 app.post("/api/todos", async (req, res) => {
   const newTodo = new Todo({
     task: req.body.task,
+    dueDate: req.body.dueDate,
   });
   const savedTodo = await newTodo.save();
   res.json(savedTodo);
 });
 
 app.put("/api/todos/:id", async (req, res) => {
+  // console.log(dDate);
   const updateTodo = await Todo.findByIdAndUpdate(
     req.params.id,
     {
       task: req.body.task,
       completed: req.body.completed,
+      dueDate: req.body.dueDate,
     },
     { new: true }
   );
